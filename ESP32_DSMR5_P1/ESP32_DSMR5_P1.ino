@@ -10,18 +10,19 @@
 // * Include settings
 #include "settings.h"
 
-#define LED_BUILTIN 2
 
+
+
+// * Start the webserver for OTA
 AsyncWebServer server(80);
 
 // * Initiate WIFI client 
 WiFiClient espClient;
 
-const char* ssid     = "InsertWifiName";
-const char* password = "InserWifiPassword";
-
 // * Initiate MQTT client
 PubSubClient mqtt_client(espClient);
+
+
 
 
 
@@ -438,9 +439,6 @@ void setup()
     Serial2.begin(115200, SERIAL_8N1, 16, 17,true);
     Serial.println("Serial port is ready to recieve.");
 
-    // * Set led pin as output
-    pinMode(LED_BUILTIN, OUTPUT);
-
     delay(5000);
 
     WiFi.begin(ssid, password);
@@ -459,7 +457,7 @@ void setup()
       request->send(200, "text/plain", "Hi! This is a sample response.");
     });
 
-    AsyncElegantOTA.begin(&server);    // Start AsyncElegantOTA
+    AsyncElegantOTA.begin(&server, OTA_USER, OTA_PASSWORD);    // Start AsyncElegantOTA
     server.begin();
     Serial.println("HTTP server started");
 
